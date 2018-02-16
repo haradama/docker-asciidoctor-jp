@@ -55,7 +55,7 @@ asciidoctor foo.adoc
 スタイルシートの指定:: -a stylesheet=/path/to/css/file.css
 ====
 
-.図形を含むPDFの生成
+.図形を含むPDFの生成
 ----
 asciidoctor-pdf -r asciidoctor-diagram -r asciidoctor-pdf-cjk-kai_gen_gothic -a pdf-style=KaiGenGothicJP foo.adoc
 ----
