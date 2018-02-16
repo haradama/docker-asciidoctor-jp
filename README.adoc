@@ -1,4 +1,5 @@
 = docker-asciidoctor-jp
+:icons: font
 
 link:https://hub.docker.com/r/asciidoctor/docker-asciidoctor/[Asciidoctor docker container] で日本語が使えるようカスタマイズしたlink:https://github.com/liquidz/docker-asciidoctor-jp[docker-asciidoctor-jp]をベースにしたDockerコンテナです。
 
@@ -32,7 +33,7 @@ link:https://hub.docker.com/r/asciidoctor/docker-asciidoctor/[Asciidoctor docker
 
 .コンテナを起動
 ----
-docker run -it -v <your directory>/documents htakeuchi/docker-asciidoctor-jp
+docker run --rm -it -v $(pwd):/documents htakeuchi/docker-asciidoctor-jp
 ----
 
 .PDFの生成
@@ -65,14 +66,15 @@ asciidoctor-pdf -r asciidoctor-diagram -r asciidoctor-pdf-cjk-kai_gen_gothic -a 
 asciidoctor -a source-highlighter=highlightjs -a stylesheet=/stylesheets/github.css foo.adoc
 ----
 
-.ePubの生成
+.EPUB3の生成
 ----
 asciidoctor-epub3 foo.adoc
 ----
 
 [NOTE]
 ====
-eOyv[asciidoctor/asciidoctor-epub3: Asciidoctor EPUB3 is a set of Asciidoctor extensions for converting AsciiDoc to EPUB3 & KF8/MOBI.](https://goo.gl/QS1ZPb)
+EUB3を生成する場合、いくつかのルールがあります。https://github.com/asciidoctor/asciidoctor-epub3[asciidoctor/asciidoctor-epub3] のサンプルなどを参照してください。
+
 ====
 
 .mobi(Kindleフォーマット）の生成
