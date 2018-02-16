@@ -73,7 +73,6 @@ asciidoctor-epub3 foo.adoc
 [NOTE]
 ====
 EUB3を生成する場合、いくつかのルールがあります。https://github.com/asciidoctor/asciidoctor-epub3[asciidoctor/asciidoctor-epub3] のサンプルなどを参照してください。
-
 ====
 
 .mobi(Kindleフォーマット）の生成
