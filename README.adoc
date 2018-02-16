@@ -28,7 +28,6 @@ link:https://hub.docker.com/r/asciidoctor/docker-asciidoctor/[Asciidoctor docker
 * asciidoctor-stylesheet-factory
 * link:http://vlgothic.dicey.org/[VL Gothic]
 
-
 == 使い方
 
 .コンテナを起動
