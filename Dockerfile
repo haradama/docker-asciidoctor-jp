@@ -1,10 +1,17 @@
 FROM asciidoctor/docker-asciidoctor
-MAINTAINER uochan
+LABEL MAINTAINER Hitoshi TAKEUCHI <hitoshi@namaraii.com>
+
+ENV COMPASS_VERSION 0.12.7
+ENV ZURB_FOUNDATION_VERSION 4.3.2
 
 RUN gem install asciidoctor-pdf-cjk-kai_gen_gothic --no-ri --no-rdoc && \
-    gem install --version '0.12.7' compass --no-ri --no-rdoc && \
-    gem install --version '4.3.2' zurb-foundation --no-ri --no-rdoc && \
-    asciidoctor-pdf-cjk-kai_gen_gothic-install
+    gem install --version ${COMPASS_VERSION} compass --no-ri --no-rdoc && \
+    gem install --version ${ZURB_FOUNDATION_VERSION} zurb-foundation --no-ri --no-rdoc && \
+    asciidoctor-pdf-cjk-kai_gen_gothic-install && \
+    ln -fs /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
+    apk add --no-cache \
+	    git \
+        openssl
 
 WORKDIR /root
 RUN wget -O VLGothic.zip "http://osdn.jp/frs/redir.php?m=jaist&f=%2Fvlgothic%2F62375%2FVLGothic-20141206.zip" && \

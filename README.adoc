@@ -1,19 +1,38 @@
 = docker-asciidoctor-jp
 
-link:https://hub.docker.com/r/asciidoctor/docker-asciidoctor/[Asciidoctor docker container] で日本語が使えるようカスタマイズしたものです。
+link:https://hub.docker.com/r/asciidoctor/docker-asciidoctor/[Asciidoctor docker container] で日本語が使えるようカスタマイズしたlink:https://github.com/liquidz/docker-asciidoctor-jp[docker-asciidoctor-jp]をベースにしたDockerコンテナです。
 
-オリジナルに加えて以下がインストールされています。
+== 何ができるか
 
+* AsciidocテキストをHTML/PDF/EPUB3/mobiへ変換する
+** 図形の描画
+*** Graphviz
+*** PlantUML
+*** ditaa
+*** blockdiag(seqdiag/actdiag/nwdiag)
+** シンタックスハイライト(CodeRay/Pygments/highlightjs/prettify
+)
+* Reveal.jsのプレゼンテーションを作成する
+* その他(https://github.com/asciidoctor/docker-asciidoctor[docker-asciidoctor参照])
+
+== 環境
+
+* Asciidoctor 1.5.6.1
+* asciidoctor-pdf (alpha)
+* Asciidoctor-epub3 (alpha)
+* asciidoctor-fopub
+* asciidoctor-confluence
+* asciidoctor-revealjs
+* asciidoctor-pdf-cjk-kai_gen_gothic]
+* asciidoctor-stylesheet-factory
 * link:http://vlgothic.dicey.org/[VL Gothic]
-* link:https://github.com/chloerei/asciidoctor-pdf-cjk-kai_gen_gothic[asciidoctor-pdf-cjk-kai_gen_gothic]
-* link:https://github.com/asciidoctor/asciidoctor-stylesheet-factory/[asciidoctor-stylesheet-factory]
-** スタイルシートは `/stylesheets` 配下にインストールされています
+
 
 == 使い方
 
 .コンテナを起動
 ----
-docker run --rm -it -v $(pwd):/documents uochan/docker-asciidoctor-jp
+docker run -it -v <your directory>/documents htakeuchi/docker-asciidoctor-jp
 ----
 
 .PDFの生成
@@ -21,12 +40,48 @@ docker run --rm -it -v $(pwd):/documents uochan/docker-asciidoctor-jp
 asciidoctor-pdf -r asciidoctor-pdf-cjk-kai_gen_gothic -a pdf-style=KaiGenGothicJP foo.adoc
 ----
 
-.図形を含むPDFの生成
+.HTMLの生成
+----
+asciidoctor foo.adoc
+----
+
+[NOTE]
+====
+必要に応じてオプションを追加してください。(-aのオプションは文書の属性として書くこともできます）
+
+図形を含む:: -r asciidoctor-diagram
+数式を含む:: -r asciidoctor-mathematical 
+シンタックスハイライト:: -a source-highlighter=highlightjs
+スタイルシートの指定:: -a stylesheet=/path/to/css/file.css
+====
+
+.図形を含むPDFの生成
 ----
 asciidoctor-pdf -r asciidoctor-diagram -r asciidoctor-pdf-cjk-kai_gen_gothic -a pdf-style=KaiGenGothicJP foo.adoc
 ----
 
-.HTMLの生成
+.HTMLの生成（シンタックスハイライト+スタイルシート指定)
 ----
 asciidoctor -a source-highlighter=highlightjs -a stylesheet=/stylesheets/github.css foo.adoc
 ----
+
+.ePubの生成
+----
+asciidoctor-epub3 foo.adoc
+----
+
+[NOTE]
+====
+eOyv[asciidoctor/asciidoctor-epub3: Asciidoctor EPUB3 is a set of Asciidoctor extensions for converting AsciiDoc to EPUB3 & KF8/MOBI.](https://goo.gl/QS1ZPb)
+====
+
+.mobi(Kindleフォーマット）の生成
+----
+kindlegen foo.epub
+----
+
+.プレゼンテーション用HTMLの生成(asciidocotr-revealjs)
+----
+asciidoctor-revealjs -a revealjsdir=https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0 foo.adoc
+----
+

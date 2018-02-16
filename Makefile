@@ -1,2 +1,2 @@
 all:
-	docker build --rm -t uochan/docker-asciidoctor-jp .
+	docker build --rm -t htakeuchi/docker-asciidoctor-jp .
