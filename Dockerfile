@@ -11,7 +11,12 @@ RUN gem install asciidoctor-pdf-cjk-kai_gen_gothic --no-ri --no-rdoc && \
     ln -fs /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
     apk add --no-cache \
 	    git \
-        openssl
+        ruby-dev \
+        build-base \
+        openssl && \
+        gem install bundler --no-ri --no-rdoc && \
+        apk del build-base ruby-dev && \
+        rm -rf /tmp/* /var/tmp/*
 
 WORKDIR /root
 RUN wget -O VLGothic.zip "http://osdn.jp/frs/redir.php?m=jaist&f=%2Fvlgothic%2F62375%2FVLGothic-20141206.zip" && \
