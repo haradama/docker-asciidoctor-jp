@@ -10,9 +10,9 @@ link:https://hub.docker.com/r/asciidoctor/docker-asciidoctor/[Asciidoctor docker
 *** Graphviz
 *** PlantUML
 *** ditaa
+*** mermaid 7.0.9
 *** blockdiag(seqdiag/actdiag/nwdiag)
-** シンタックスハイライト(CodeRay/Pygments/highlightjs/prettify
-)
+** シンタックスハイライト(CodeRay/Pygments/highlightjs/prettify)
 * Reveal.jsのプレゼンテーションを作成する
 * その他(https://github.com/asciidoctor/docker-asciidoctor[docker-asciidoctor参照])
 
