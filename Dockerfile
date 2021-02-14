@@ -1,31 +1,34 @@
-FROM asciidoctor/docker-asciidoctor
-LABEL MAINTAINER Hitoshi TAKEUCHI <hitoshi@namaraii.com>
+FROM asciidoctor/docker-asciidoctor:1.3.0
 
-ENV COMPASS_VERSION 0.12.7
-ENV ZURB_FOUNDATION_VERSION 4.3.2
-ENV MERMAID_VERSION 7.0.9
-WORKDIR /root
+LABEL Maintainer="Masafumi Harada"
 
-RUN gem install asciidoctor-pdf-cjk-kai_gen_gothic --no-ri --no-rdoc && \
-    gem install --version ${COMPASS_VERSION} compass --no-ri --no-rdoc && \
-    gem install --version ${ZURB_FOUNDATION_VERSION} zurb-foundation --no-ri --no-rdoc && \
-    asciidoctor-pdf-cjk-kai_gen_gothic-install && \
+ENV COMPASS_VERSION=0.12.7
+ENV ZURB_FOUNDATION_VERSION=4.3.2
+ENV ADOCTOR_DIAGRAM_VERSION=1.5.15
+ENV IPAEXFONT_VERSION=00401
+
+ENV IPAEXFONT_URL=https://moji.or.jp/wp-content/ipafont/IPAexfont/IPAexfont${IPAEXFONT_VERSION}.zip
+ENV ADOCTOR_STYLESHEET_FACTORY_URL=https://github.com/asciidoctor/asciidoctor-stylesheet-factory.git
+
+WORKDIR /tmp
+
+COPY default-theme.patch /tmp/
+
+RUN gem install -v ${COMPASS_VERSION} compass -N && \
+    gem install -v ${ZURB_FOUNDATION_VERSION} zurb-foundation -N && \
+    gem install bundler -N && \
+    gem install -v ${ADOCTOR_DIAGRAM_VERSION} asciidoctor-diagram -N && \
     ln -fs /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
-    apk add --no-cache nodejs nodejs-npm ca-certificates openssl && \
-    rm -rf /tmp/* /var/tmp/* && \
-    wget -O VLGothic.zip "http://osdn.jp/frs/redir.php?m=jaist&f=%2Fvlgothic%2F62375%2FVLGothic-20141206.zip" && \
-    unzip VLGothic.zip && \
-    mkdir -p /root/.fonts && \
-    cp VLGothic/VL-Gothic-Regular.ttf /root/.fonts && \
-    rm -rf /root/VLGothic* && \
-    wget -qO- "https://github.com/dustinblackman/phantomized/releases/download/2.1.1/dockerized-phantomjs.tar.gz" | tar xz -C / && \
-    npm install -g phantomjs mermaid@${MERMAID_VERSION} && \
-    wget https://github.com/asciidoctor/asciidoctor-stylesheet-factory/archive/master.zip && \
-    unzip master.zip && \
-    cd asciidoctor-stylesheet-factory-master && \
-    compass compile && \
-    cp -pr stylesheets / && \
-    cd .. && \
-    rm -rf master.zip asciidoctor-stylesheet-factory-master
-   
+    wget ${IPAEXFONT_URL} && \
+    unzip IPAexfont${IPAEXFONT_VERSION}.zip && \
+    mv IPAexfont${IPAEXFONT_VERSION}/*.ttf /usr/lib/ruby/gems/2.7.0/gems/asciidoctor-pdf-1.5.4/data/fonts/ && \
+    fc-cache -fv && \
+    apk add --no-cache nodejs nodejs-npm ca-certificates openssl grep patch && \
+    patch -c -u /usr/lib/ruby/gems/2.7.0/gems/asciidoctor-pdf-1.5.4/data/themes/default-theme.yml < /tmp/default-theme.patch && \
+    git clone --depth 1 -b master --single-branch ${ADOCTOR_STYLESHEET_FACTORY_URL} && \
+    cd asciidoctor-stylesheet-factory && \
+    npm i && \
+    ./build-stylesheet.sh && \
+    rm -rf /tmp/*
+
 WORKDIR /documents
